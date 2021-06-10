@@ -27,14 +27,17 @@ parser.add_argument(
 args = parser.parse_args()
 with serial.Serial() as ser:
     ser.baudrate = 9600 #From Schott Manual, do not change
-    ser.port = 'COM1' #this could change and will need an function to select the right com port later
+    ser.port = 'COM3' #this could change and will need an function to select the right com port later
     ser.parity = serial.PARITY_NONE #From Schott Manual, do not change
     ser.stopbits = serial.STOPBITS_ONE #From Schott Manual, do not change
-    # ser.write_timeout(2) # Not known if we need to set a timeout yet (val in seconds)
-    # ser.open()
-    msg='0BR0'+hex(args.brightness)[2:] #[id][BRightness][0 for padding the number][the brightness as a hexadecimal with the '0x' in front chopped off]
-    msg.encode('ascii')
-    # ser.write(msg)
+    ser.xonxoff=False
+    ser.write_timeout=0 # Not known if we need to set a timeout yet (val in seconds)
+    ser.open()
+    msg='0BR'+hex(args.brightness)[2:].zfill(4)+";" #[id][BRightness][0 for padding the number][the brightness as a hexadecimal with the '0x' in front chopped off]
+    # msg = '0LK0000;'
+    msg=msg.encode()
+    print(msg)
+    ser.write(msg)
 
 end=time.time()
 print(f"Executed in {end-begin}")
