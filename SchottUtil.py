@@ -24,6 +24,14 @@ parser.add_argument(
     type=range_limited_int,
     help='The brightness of the lamp from 0 to 1000'
 )
+parser.add_argument(
+    '--delay',
+    dest='delay',
+    metavar='M (seconds)',
+    type=int,
+    default=0,
+    help='Number of seconds from call time to when the brightness command is sent'
+)
 args = parser.parse_args()
 with serial.Serial() as ser:
     ser.baudrate = 9600 #From Schott Manual, do not change
@@ -37,7 +45,8 @@ with serial.Serial() as ser:
     # msg = '0LK0000;'
     msg=msg.encode()
     print(msg)
+    time.sleep(args.delay)
     ser.write(msg)
 
 end=time.time()
-print(f"Executed in {end-begin}")
+# print(f"Executed in {end-begin}")
