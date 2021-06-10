@@ -25,12 +25,19 @@ parser.add_argument(
     help='The brightness of the lamp from 0 to 1000'
 )
 parser.add_argument(
-    '--delay',
-    dest='delay',
+    '--start',
+    dest='start',
     metavar='M (seconds)',
     type=int,
     default=0,
     help='Number of seconds from call time to when the brightness command is sent'
+)
+parser.add_argument(
+    '--stop',
+    dest='stop',
+    metavar='M (seconds)',
+    type=int,
+    help='Number of seconds from call time to when the off command is sent'
 )
 args = parser.parse_args()
 with serial.Serial() as ser:
@@ -42,10 +49,14 @@ with serial.Serial() as ser:
     ser.write_timeout=0 # Not known if we need to set a timeout yet (val in seconds)
     ser.open()
     msg='0BR'+hex(args.brightness)[2:].zfill(4)+";" #[id][BRightness][0 for padding the number][the brightness as a hexadecimal with the '0x' in front chopped off]
-    # msg = '0LK0000;'
     msg=msg.encode()
     print(msg)
-    time.sleep(args.delay)
+    time.sleep(args.start)
+    ser.write(msg)
+    if args.stop is not None:
+        time.sleep(args.stop-args.start)
+    msg = '0BR0000;'
+    msg=msg.encode()
     ser.write(msg)
 
 end=time.time()
