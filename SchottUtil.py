@@ -54,14 +54,14 @@ with serial.Serial() as ser:
     time.sleep(args.start)
     # lock
     msg0 = '0LK0001;'
-    msg0.encode()
+    msg0.encode('utf-8')
     ser.write(msg0)
     time.sleep(20)
     ser.write(msg)
     if args.stop is not None:
         time.sleep(args.stop-args.start)
     msg = '0BR0000;'
-    msg=msg.encode()
+    msg=msg.encode('utf-8')
     ser.write(msg)
     # unlock
     msg0 = '0LK0000;'
