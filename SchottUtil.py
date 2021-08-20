@@ -52,12 +52,21 @@ with serial.Serial() as ser:
     msg=msg.encode()
     print(msg)
     time.sleep(args.start)
+    # lock
+    msg0 = '0LK0001;'
+    msg0.encode()
+    ser.write(msg0)
+    time.sleep(20)
     ser.write(msg)
     if args.stop is not None:
         time.sleep(args.stop-args.start)
     msg = '0BR0000;'
     msg=msg.encode()
     ser.write(msg)
+    # unlock
+    msg0 = '0LK0000;'
+    msg0.encode()
+    ser.write(msg0)
 
 end=time.time()
 # print(f"Executed in {end-begin}")
