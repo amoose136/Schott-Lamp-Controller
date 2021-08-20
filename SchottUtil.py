@@ -56,7 +56,7 @@ with serial.Serial() as ser:
     msg0 = '0LK0001;'
     msg0 = msg0.encode('utf-8')
     ser.write(msg0)
-    time.sleep(20)
+    time.sleep(.02) #20ms delay
     ser.write(msg)
     if args.stop is not None:
         time.sleep(args.stop-args.start)
