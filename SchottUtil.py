@@ -65,7 +65,7 @@ with serial.Serial() as ser:
     ser.write(msg)
     # unlock
     msg0 = '0LK0000;'
-    msg0.encode()
+    msg0.encode('utf-8')
     ser.write(msg0)
 
 end=time.time()
